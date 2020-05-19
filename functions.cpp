@@ -38,22 +38,22 @@ void scan(const char *input_file){
                 cout<<mass[i]->f_name<<": "<<mass[i]->str<<"\t"<<mass[i]->len<<endl; i++;
             }
             if(i==sizemass){
-               mass=(CString**)realloc(mass, 2*i*sizeof(CString*));
-               /*tmp = mass;
-               mass=new CString* [sizemass*2];
+               CString** tmp_ = new CString* [sizemass];
                for(int k=0;k<sizemass;k++){
-                   mass[k]=tmp[k];
-               }*/
+                   tmp_[k] = mass[k];
+               }
+               delete[] mass;
+               mass = new CString* [sizemass*2];
+               for(int k=0;k<sizemass;k++){
+                   mass[k]=tmp_[k];
+               }
+               delete[] tmp_;
+               tmp_ = NULL;
                sizemass *= 2;
             }
         }
         in.close();
         cout<<"\n-----------WRITE---------"<<endl;
-        //fstream clear_file1("file1", ios::out);
-        //clear_file1.close();
-        //fstream clear_file2("file2", ios::out);
-        //clear_file2.close();
-
         for(int j=0;j<i;j++){
             cout<<"\nj: "<<j<<"\t"<<mass[j]->f_name<<" "<<mass[j]->len<<" "<<mass[j]->str<<"\t";
             mass[j]->output();
@@ -62,16 +62,12 @@ void scan(const char *input_file){
         cout<<"\n_________________________i: "<<i<<" sizemass: "<<sizemass<<endl;
         for(int j=0; j<i;j++){
             cout<<j<<" "<<mass[j]->str;
-            //flush (cout);
             delete mass[j];
-            cout<<endl;
         }
-        cout<<"\nVOID"<<endl;
-        for (int j=i; j<sizemass; j++){
-            delete mass[j];
-            cout<<j <<" ~ptr"<<endl;
-        }
-        delete[] mass;
+        cout<<"\nVOID";
+        delete[] mass; cout<<" ~ptr"<<endl;
+        //for (int j=i; j<sizemass; j++){ delete mass[j]; cout<<j <<" ~ptr"<<endl; }
+        //delete[] mass;
         mass=NULL;
     }
 
